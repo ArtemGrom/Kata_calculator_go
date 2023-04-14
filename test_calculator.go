@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
+	"strings"
 )
 
 var roman_number = map[string]string{
@@ -82,11 +85,19 @@ func get_result(num_1 int, operator string, num_2 int) int {
 }
 
 func main() {
-	var number_1, operator, number_2 string
-
 	fmt.Print("Введите два числа и оператор между ними через пробелы(числа могут быть римские(от I до X)" +
 		"или арабские(от 1 до 10), операторы допустимы для использования +, -, *, /. ): ")
-	fmt.Scanln(&number_1, &operator, &number_2)
+
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	text := scanner.Text()
+
+	arr := strings.Split(text, " ")
+	if len(arr) != 3 {
+		panic("Нужно использовать только 2 операнда и 1 оператор. Запустите заного.")
+	}
+
+	var number_1, operator, number_2 = arr[0], arr[1], arr[2]
 
 	_, KeyCheck_1 := roman_number[number_1]
 	_, KeyCheck_2 := roman_number[number_2]
@@ -101,6 +112,7 @@ func main() {
 			fmt.Println(get_result(number_1_int, operator, number_2_int))
 		}
 	} else {
+
 		for key := range roman_number {
 			if number_1 == key {
 				number_1 = roman_number[key]
